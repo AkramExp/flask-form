@@ -32,10 +32,11 @@ def home():
         last_name = request.form['last_name']
         email = request.form['email']
         date = request.form['date']
+        date_obj = datetime.strptime(date, "%Y-%m-%d")
         occupation = request.form['occupation']
 
         form = Form(first_name=first_name, last_name=last_name, email=email,
-                    date=date, occupation=occupation)
+                    date=date_obj, occupation=occupation)
         db.session.add(form)
         db.session.commit()
 
@@ -45,6 +46,8 @@ def home():
                           sender=app.config["MAIL_USERNAME"],
                           recipients=[email],
                           body=message_body)
+
+        mail.send(message)
 
         flash(f"{first_name}, your form was submitted successfully", "success")
 
